@@ -3,4 +3,9 @@
     <string name="add_todo_item">Add todo item</string>
     <string name="to_do_picture">To do picture</string>
     <string name="to_do_list">To Do List:</string>
+    <string name="enter_note_hint">Enter note:</string>
+    <string name="low">Low</string>
+    <string name="high">High</string>
+    <string name="medium">Medium</string>
+    <string name="save">SAVE</string>
 </resources>

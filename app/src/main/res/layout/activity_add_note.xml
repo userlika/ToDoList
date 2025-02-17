@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/light_pink"
+    tools:context=".AddNoteActivity">
+
+    <EditText
+        android:id="@+id/editTextAddNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="Enter note"
+        android:hint="@string/enter_note_hint"
+        android:inputType="textPersonName"
+        android:padding="16dp"
+        android:layout_margin="16dp" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButtonHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_margin="8dp"
+            android:text="@string/high"
+            android:checked="true"
+            android:textColor="@color/light_blue"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:background="@color/green_priority_1"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_margin="8dp"
+            android:text="@string/medium"
+            android:textColor="@color/light_blue"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:background="@color/yellow_priority_2"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonLow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_margin="8dp"
+            android:text="@string/low"
+            android:textColor="@color/light_blue"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:background="@color/pink_priority_3"/>
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="12dp"
+        android:backgroundTint="@color/light_blue"
+        android:text="@string/save"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
+
+</LinearLayout>
