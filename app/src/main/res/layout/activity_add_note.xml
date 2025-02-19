@@ -9,6 +9,12 @@
     android:background="@color/light_pink"
     tools:context=".AddNoteActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:contentDescription="@string/notebook"
+        android:src="@drawable/note_book" />
+
     <EditText
         android:id="@+id/editTextAddNote"
         android:layout_width="match_parent"
