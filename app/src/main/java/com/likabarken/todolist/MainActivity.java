@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    private LinearLayout linearLayoutNotes;
+    private RecyclerView recycleViewNotes;
     private FloatingActionButton buttonAddNote;
 
     private DataBase database = DataBase.getInstance();
@@ -52,16 +53,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        linearLayoutNotes = findViewById(R.id.linearLayoutNotes);
+        recycleViewNotes = findViewById(R.id.recycleViewNotes);
         buttonAddNote = findViewById(R.id.buttonAddNote);
     }
 
     private void showNotes() {
-        linearLayoutNotes.removeAllViews();
+        recycleViewNotes.removeAllViews();
         for(Note note : database.getNotes()) {
             View view = getLayoutInflater().inflate(
                     R.layout.note_item,
-                    linearLayoutNotes,
+                    recycleViewNotes,
                     false
             );
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
             int color = ContextCompat.getColor(this, colorResId);
             textViewNote.setBackgroundColor(color);
-            linearLayoutNotes.addView(view);
+            recycleViewNotes.addView(view);
         }
 
     }
