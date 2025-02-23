@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">ToDoList</string>
-    <string name="add_todo_item">Add todo item</string>
-    <string name="to_do_picture">To do picture</string>
-    <string name="to_do_list">To Do List:</string>
-    <string name="enter_note_hint">Enter note:</string>
+    <string name="add_todo_item" translatable="false">Add todo item</string>
+    <string name="to_do_picture" translatable="false">To do picture</string>
+    <string name="to_do_list" translatable="false">To Do List:</string>
+    <string name="enter_note_hint" translatable="false">Enter note:</string>
     <string name="low">Low</string>
     <string name="high">High</string>
     <string name="medium">Medium</string>
     <string name="save">SAVE</string>
-    <string name="notebook">Notebook</string>
+    <string name="notebook" translatable="false">Notebook</string>
 </resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="low">Низкий</string>
+    <string name="high">Высокий</string>
+    <string name="medium">Средний</string>
+    <string name="save">СОХРАНИТЬ</string>
+</resources>
