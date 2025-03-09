@@ -14,6 +14,8 @@ public interface NotesDao {
 
     @Query("SELECT * FROM notes")
     List<Note> getNotes();
+    // Метод, который возвращает коллекцию данных в Dao должен иметь интерфейсный тип List.
+    // Здесь нельзя указывать конкретную реализацию.
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     void add(Note note);

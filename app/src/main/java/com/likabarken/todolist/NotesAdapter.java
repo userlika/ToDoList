@@ -10,9 +10,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
-    private ArrayList<Note> notes = new ArrayList<>();
+
+    // Здесь можно в переменной с типом List использовать конструктор с типом ArrayList,
+    // посколько ArrayList реализует интерфейс List
+    private List<Note> notes = new ArrayList<>();
 
     // Из активити в переменную onNoteClickListener будем устанавливать новое значение,
     // будем передавать реализацию интерфейса onNoteClickListener,
@@ -23,14 +27,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         this.onNoteClickListener = onNoteClickListener;
     }
 
-    public ArrayList<Note> getNotes() {
+    public List<Note> getNotes() {
         // return notes;
         // Если нужно вернуть коллекцию, то возвращать нужно копию коллекции, чтобы снаружи не было
         // возможности изменять этот объект
         return new ArrayList<>(notes);
     }
 
-    public void setNotes(ArrayList<Note> notes) {
+    public void setNotes(List<Note> notes) {
         this.notes = notes;
         notifyDataSetChanged();
     }
