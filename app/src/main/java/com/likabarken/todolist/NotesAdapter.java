@@ -23,6 +23,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         this.onNoteClickListener = onNoteClickListener;
     }
 
+    public ArrayList<Note> getNotes() {
+        // return notes;
+        // Если нужно вернуть коллекцию, то возвращать нужно копию коллекции, чтобы снаружи не было
+        // возможности изменять этот объект
+        return new ArrayList<>(notes);
+    }
+
     public void setNotes(ArrayList<Note> notes) {
         this.notes = notes;
         notifyDataSetChanged();
