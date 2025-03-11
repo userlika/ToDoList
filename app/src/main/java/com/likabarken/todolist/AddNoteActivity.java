@@ -3,6 +3,8 @@ package com.likabarken.todolist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +21,8 @@ public class AddNoteActivity extends AppCompatActivity {
     private RadioButton radioButtonHigh, radioButtonMedium, radioButtonLow;
     private Button buttonSave;
     private NoteDatabase noteDatabase;
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +57,23 @@ public class AddNoteActivity extends AppCompatActivity {
         String text = editTextAddNote.getText().toString().trim();
         int priority = getPriority();
         Note note = new Note(text, priority);
-        noteDatabase.notesDao().add(note);
 
-        finish(); // close Activity
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                noteDatabase.notesDao().add(note);
+            }
+        });
+        thread.start();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                finish(); // close Activity
+            }
+        });
+
+
     }
 
     private int getPriority() {

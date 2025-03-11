@@ -1,6 +1,8 @@
 package com.likabarken.todolist;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private NotesAdapter notesAdapter;
 
     private NoteDatabase noteDatabase;
+
+    // Ссылка на главный поток нужна потому, что работать с view можно только из главного потока
+    // Держит ссылку на главный поток
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +77,26 @@ public class MainActivity extends AppCompatActivity {
             {
                 int position = viewHolder.getAdapterPosition();
                 Note note = notesAdapter.getNotes().get(position);
-                noteDatabase.notesDao().remove(note.getId());
-                showNotes();
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Создан поток, внутри которого удаляется элемент
+                        noteDatabase.notesDao().remove(note.getId());
+                        /*
+                         showNotes() нужно вызвать на главном потоке, поэтому отправляем хэндлеру
+                         сообщение в виде объекта Runnable, теперь хэндлер, который хранит ссылку на
+                         главный поток, будет обрабатывать все входящие сообщения
+                        */
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                showNotes();
+                            }
+                        });
+                    }
+                });
+                thread.start();
             }
         });
 
@@ -98,7 +123,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNotes() {
-        notesAdapter.setNotes(noteDatabase.notesDao().getNotes());
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // notesAdapter.setNotes(noteDatabase.notesDao().getNotes()); - тут получаем данные
+                // из базы, затем устанавливаем их в адаптер
 
+                /*
+                Рефакторинг: получение данных сделать в фоновом потоке, а установку данных сделать
+                в главном потоке.
+                 */
+                List<Note> notes = noteDatabase.notesDao().getNotes();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        notesAdapter.setNotes(notes);
+                    }
+                });
+            }
+        });
+        thread.start();
     }
 }
