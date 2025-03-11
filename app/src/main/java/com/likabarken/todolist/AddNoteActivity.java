@@ -18,13 +18,14 @@ public class AddNoteActivity extends AppCompatActivity {
     private EditText editTextAddNote;
     private RadioButton radioButtonHigh, radioButtonMedium, radioButtonLow;
     private Button buttonSave;
-    private DataBase database = DataBase.getInstance();
+    private NoteDatabase noteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_note);
+        noteDatabase = NoteDatabase.getInstance(getApplication());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -51,9 +52,8 @@ public class AddNoteActivity extends AppCompatActivity {
     private void saveNote() {
         String text = editTextAddNote.getText().toString().trim();
         int priority = getPriority();
-        int id = database.getNotes().size();
-        Note note = new Note(id, text, priority);
-        database.add(note);
+        Note note = new Note(text, priority);
+        noteDatabase.notesDao().add(note);
 
         finish(); // close Activity
     }
