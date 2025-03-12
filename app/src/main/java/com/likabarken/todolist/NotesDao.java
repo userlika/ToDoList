@@ -1,5 +1,6 @@
 package com.likabarken.todolist;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface NotesDao {
 
     @Query("SELECT * FROM notes")
-    List<Note> getNotes();
+    LiveData<List<Note>> getNotes();
     // Метод, который возвращает коллекцию данных в Dao должен иметь интерфейсный тип List.
     // Здесь нельзя указывать конкретную реализацию.
 
