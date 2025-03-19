@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton buttonAddNote;
     private NotesAdapter notesAdapter;
 
-    private NoteDatabase noteDatabase;
-
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +43,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        noteDatabase = NoteDatabase.getInstance(getApplication());
-        //getApplication() - возвращает ссылку на объект всего приложения
-
+        viewModel = new MainViewModel(getApplication());
         initViews();
         notesAdapter = new NotesAdapter();
         notesAdapter.setOnNoteClickListener(new NotesAdapter.OnNoteClickListener() {
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Подписка на все изменения, которые произойдут в базе данных.
         // При наличии изменений, новые данные прилетят в метод onChanged.
-        noteDatabase.notesDao().getNotes().observe(this, new Observer<List<Note>>() {
+        viewModel.getNotes().observe(this, new Observer<List<Note>>() {
             @Override
             public void onChanged(List<Note> notes) {
                 notesAdapter.setNotes(notes);
@@ -83,15 +80,8 @@ public class MainActivity extends AppCompatActivity {
                         int position = viewHolder.getAdapterPosition();
                         Note note = notesAdapter.getNotes().get(position);
 
-                        Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Создан поток, внутри которого удаляется элемент
-                                noteDatabase.notesDao().remove(note.getId());
+                        viewModel.remove(note);
 
-                            }
-                        });
-                        thread.start();
                     }
                 });
 
