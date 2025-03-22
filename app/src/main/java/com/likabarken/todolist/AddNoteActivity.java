@@ -15,21 +15,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 public class AddNoteActivity extends AppCompatActivity {
     private EditText editTextAddNote;
     private RadioButton radioButtonHigh, radioButtonMedium, radioButtonLow;
     private Button buttonSave;
-    private NoteDatabase noteDatabase;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private AddNoteViewModel viewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_note);
-        noteDatabase = NoteDatabase.getInstance(getApplication());
+
+        viewModel = new ViewModelProvider(this).get(AddNoteViewModel.class);
+        viewModel.getShouldCloseScreen().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean shouldClose) {
+                if (shouldClose) {
+                    finish();
+                }
+            }
+        });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -57,22 +68,7 @@ public class AddNoteActivity extends AppCompatActivity {
         String text = editTextAddNote.getText().toString().trim();
         int priority = getPriority();
         Note note = new Note(text, priority);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                noteDatabase.notesDao().add(note);
-            }
-        });
-        thread.start();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                finish(); // close Activity
-            }
-        });
-
+        viewModel.saveNote(note);
 
     }
 
