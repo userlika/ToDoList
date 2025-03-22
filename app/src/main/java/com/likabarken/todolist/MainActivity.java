@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,15 +45,32 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        viewModel = new MainViewModel(getApplication());
+        // viewModel занимается только отображением данных и взаимодействием с пользователем
+        // viewModel живет дольше, чем активити и умеет переживать переворот экрана
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+//        viewModel.getCount().observe(this, new Observer<Integer>() {
+//            @Override
+//            public void onChanged(Integer count) {
+//                Toast.makeText(
+//                        MainActivity.this,
+//                        String.valueOf(count),
+//                        Toast.LENGTH_SHORT
+//                ).show();
+//            }
+//        });
+
         initViews();
         notesAdapter = new NotesAdapter();
-        notesAdapter.setOnNoteClickListener(new NotesAdapter.OnNoteClickListener() {
-            @Override
-            public void onNoteClick(Note note) {
 
-            }
-        });
+//        notesAdapter.setOnNoteClickListener(new NotesAdapter.OnNoteClickListener() {
+//            @Override
+//            public void onNoteClick(Note note) {
+//                viewModel.showCount();
+//                //int count  = viewModel.getCount();
+//            }
+//        });
+
         recycleViewNotes.setAdapter(notesAdapter);
 
         // Подписка на все изменения, которые произойдут в базе данных.
