@@ -9,6 +9,8 @@ import androidx.room.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+
 // DAO - Data Access Objects
 @Dao
 public interface NotesDao {
@@ -19,7 +21,8 @@ public interface NotesDao {
     // Здесь нельзя указывать конкретную реализацию.
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    void add(Note note);
+    // Completable - класс из библиотеки RxJava3, на этот объект можно подписываться
+    Completable add(Note note);
 
     @Query("DELETE FROM notes WHERE id = :id")
     void remove(int id);
