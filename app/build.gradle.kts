@@ -39,8 +39,15 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
+    val room_version = "2.7.2"
+
     implementation(libs.room)
     annotationProcessor(libs.room.annotation.processor)
+    implementation("androidx.room:room-rxjava3:$room_version")
+
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.5")
+
     implementation(libs.room.rxjava3)
     implementation(libs.rxandroid)
     implementation(libs.rxjava)

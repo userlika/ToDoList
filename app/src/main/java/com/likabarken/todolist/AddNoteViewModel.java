@@ -7,6 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class AddNoteViewModel extends AndroidViewModel {
 
     private NotesDao notesDao;
@@ -24,16 +29,17 @@ public class AddNoteViewModel extends AndroidViewModel {
     }
 
     public void saveNote(Note note) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                notesDao.add(note);
-
-                // setValue можно вызывать только из главного потока, а postValue - из любого потока
-                shouldCloseScreen.postValue(true);
-            }
-        });
-        thread.start();
-
+        // Чтобы метод add выполнился - на него надо подписаться
+        // Все объекты в RxJava используют механизм callback-ов(н-р, слушатель клика или свайпа)
+        notesDao.add(note)
+                .subscribeOn(Schedulers.io()) // добавление в базу в фоновом потоке, аргумент - поток
+                .observeOn(AndroidSchedulers.mainThread()) // переключить поток на главный поток
+                .subscribe(new Action() {
+                    @Override
+                    public void run() throws Throwable {
+                        shouldCloseScreen.setValue(true);
+                    }
+                });
+        // setValue можно вызывать только на главном потоке
     }
 }
