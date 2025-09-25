@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 
 // DAO - Data Access Objects
 @Dao
 public interface NotesDao {
 
     @Query("SELECT * FROM notes")
-    LiveData<List<Note>> getNotes();
+    Single<List<Note>> getNotes();
     // Метод, который возвращает коллекцию данных в Dao должен иметь интерфейсный тип List.
     // Здесь нельзя указывать конкретную реализацию.
 
@@ -25,6 +26,6 @@ public interface NotesDao {
     Completable add(Note note);
 
     @Query("DELETE FROM notes WHERE id = :id")
-    void remove(int id);
+    Completable remove(int id);
 
 }
