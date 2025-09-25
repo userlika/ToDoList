@@ -41,7 +41,6 @@ public class AddNoteViewModel extends AndroidViewModel {
         // Чтобы метод add выполнился - на него надо подписаться
         // Все объекты в RxJava используют механизм callback-ов(н-р, слушатель клика или свайпа)
         Disposable disposable = notesDao.add(note)
-                .delay(5, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()) // добавление в базу в фоновом потоке, аргумент - поток
                 .observeOn(AndroidSchedulers.mainThread()) // переключить поток на главный поток
                 .subscribe(new Action() {
