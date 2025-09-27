@@ -17,15 +17,15 @@ import io.reactivex.rxjava3.core.Single;
 public interface NotesDao {
 
     @Query("SELECT * FROM notes")
-    Single<List<Note>> getNotes();
+    List<Note> getNotes();
     // Метод, который возвращает коллекцию данных в Dao должен иметь интерфейсный тип List.
     // Здесь нельзя указывать конкретную реализацию.
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     // Completable - класс из библиотеки RxJava3, на этот объект можно подписываться
-    Completable add(Note note);
+    void add(Note note);
 
     @Query("DELETE FROM notes WHERE id = :id")
-    Completable remove(int id);
+    void remove(int id);
 
 }
