@@ -115,12 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        viewModel.refershList();
-    }
-
     private void initViews() {
         recycleViewNotes = findViewById(R.id.recycleViewNotes);
         buttonAddNote = findViewById(R.id.buttonAddNote);

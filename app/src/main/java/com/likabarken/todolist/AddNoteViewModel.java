@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AddNoteViewModel extends AndroidViewModel {
@@ -41,7 +42,7 @@ public class AddNoteViewModel extends AndroidViewModel {
     public void saveNote(Note note) {
         // Чтобы метод add выполнился - на него надо подписаться
         // Все объекты в RxJava используют механизм callback-ов(н-р, слушатель клика или свайпа)
-        Disposable disposable = saveNoteRx(note)
+        Disposable disposable = notesDao.add(note)
                 .subscribeOn(Schedulers.io()) // добавление в базу в фоновом потоке, аргумент - поток
                 .observeOn(AndroidSchedulers.mainThread()) // переключить поток на главный поток
                 .subscribe(new Action() {
@@ -50,19 +51,15 @@ public class AddNoteViewModel extends AndroidViewModel {
                         Log.d("AddNoteViewModel", "subscribe");
                         shouldCloseScreen.setValue(true);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Throwable {
+                        Log.d("AddNoteViewModel", "Error during saving a note.");
+                    }
                 });
 
         compositeDisposable.add(disposable);
 //        // setValue можно вызывать только на главном потоке
-    }
-
-    private Completable saveNoteRx(Note note){
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Throwable {
-                notesDao.add(note);
-            }
-        });
     }
 
     // В момент уничтожения ViewModel - у нее вызывается метод onCleared()
